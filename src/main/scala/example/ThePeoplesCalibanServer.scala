@@ -12,9 +12,9 @@ import scala.io.StdIn
 
 object ThePeoplesCalibanServer extends App with AkkaHttpCirceAdapter {
 
-  implicit val system: ActorSystem = ActorSystem()
+  implicit val system: ActorSystem                        = ActorSystem()
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
-  implicit val runtime: Runtime[ZEnv] = Runtime.default
+  implicit val runtime: Runtime[ZEnv]                     = Runtime.default
 
   val interpreter: GraphQLInterpreter[zio.ZEnv, CalibanError] = runtime.unsafeRun(
     PeopleService
@@ -36,5 +36,28 @@ object ThePeoplesCalibanServer extends App with AkkaHttpCirceAdapter {
   bindingFuture
     .flatMap(_.unbind())
     .onComplete(_ => system.terminate())
+  /*
+   * TODO add doobie ..
+   */
 
+  //  def upsertLanguage(name: String): ConnectionIO[UUID] =
+  //    sql"""INSERT INTO languages(id, name) VALUES
+  //         |(${UUID.randomUUID()}, $name)
+  //         |ON CONFLICT ON CONSTRAINT languages_name_key
+  //         |DO UPDATE SET name=languages.name RETURNING (id)
+  //         |""".stripMargin.update.withUniqueGeneratedKeys[UUID]("id")
+  //
+  //  def insertLike(who: String, what: String): ConnectionIO[Unit] =
+  //    upsertLanguage(what).flatMap { id =>
+  //      sql"""INSERT INTO likes(id, language_id, username, created)
+  //           |VALUES(${UUID.randomUUID()}, $id, $who)
+  //           |""".stripMargin.update.run.void
+  //    }
+
+  //  val transactor: Transactor[Task] = Transactor.fromDriverManager(
+  //    driver = "org.postgresql.Driver",
+  //    url = "jdbc:postgresql:caliban",
+  //    user = "reidmewborne",
+  //    pass = ""
+  //  )
 }

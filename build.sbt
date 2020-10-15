@@ -9,10 +9,15 @@ lazy val root = (project in file("."))
   .settings(
     name := "fun-graphql",
     libraryDependencies ++= Seq(
-        caliban,
-        calibanAkka,
-        zio,
-        circe,
-        scalaTest % Test
+        Caliban.caliban,
+        Caliban.akka,
+        Caliban.circe,
+        Doobie.psql,
+        Doobie.hikari,
+        Doobie.quill,
+        Zio.dev,
+        Zio.catsInterop,
+        scalaTest % Test,
+        "com.softwaremill.sttp.tapir" %% "tapir-json-circe" % "0.14.3"
       )
   )
